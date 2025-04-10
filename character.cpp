@@ -1,6 +1,6 @@
 #include "Character.h"
 
-character::Character()
+Character::Character()
 {
     name = " ";
     race = " ";
@@ -8,7 +8,7 @@ character::Character()
 
     playerRace = {"Elf", "Dwarf", "Firelord", "Goblin", "Human"};
 
-    level = 0, health = 0, total = 0, totalhealth = 0, maxhealth = 0, heal = 0;
+    health = 0, totalhealth = 0, maxhealth = 0, heal = 0;
 
     level = 1, current_xp = 0, base_xp = 83, xp_to_level = base_xp, min_level = 1, maxlevel = 60;
 }
@@ -51,7 +51,7 @@ int counter = 0;
             health = 68;
         }
         else{
-            health = 100
+            health = 100;
             break;
         }
     }
@@ -62,7 +62,7 @@ int counter = 0;
     system("cls");
 
     //fun
-    for(int i = 0; i<=couter; i++){
+    for(int i = 0; i<=counter; i++){
         if(i == 0){
             std::cout<<"Creating character.\n";
         }
@@ -73,7 +73,7 @@ int counter = 0;
             std::cout<<"Creating character...\n";
             break;
         }
-        sleep(400);
+        Sleep(400);
         system("cls");
         counter++;
     }
