@@ -1,4 +1,4 @@
-#include "Character.h"
+#include "character.h"
 
 Character::Character()
 {
@@ -19,7 +19,7 @@ int counter = 0;
 
     //basic
     std:: cout<< "Enter character name: ";
-    std:: cin >> name;
+    std::getline(std::cin, name);
 
     std:: cout<< "Enter character race: ";
     std:: cout<< "Elf\n";
@@ -30,36 +30,32 @@ int counter = 0;
     std:: cout<< "Type below your race\n\n";
     std:: cin >> race;
 
-    std::for_each(race.begin(), race.end(), [](char & c){
-        c= :: tolower(c);
-    });
+    for(int i = 0; i < race.size(); i++) race[i] = std::tolower(race[i]);
 
-    for(int i = 0; i<sizeof(playerRace); i++){
-        if(race == "Elf"){
-            health = 80;
-        }
-        if(race == "Dwarf"){
-            health = 120;
-        }
-        if(race == "Fire lord"){
-            health = 150;
-        }
-        if(race == "Goblin"){
-            health = 82;
-        }
-        if(race == "Human"){
-            health = 68;
-        }
-        else{
-            health = 100;
-            break;
-        }
+    if(race == "elf"){
+        health = 80;
+    }
+    else if(race == "dwarf"){
+        health = 120;
+    }
+    else if(race == "firelord"){
+        health = 150;
+    }
+    else if(race == "goblin"){
+        health = 82;
+    }
+    else if(race == "human"){
+        health = 68;
+    }
+    else{
+        health = 100;
     }
 
-    std:: cout<<"/n";
+    std:: cout<<"\n";
     std:: cout<< "Enter chartacter sex: ";
     std:: cin>> sex;
-    system("cls");
+    system("sleep 2");
+    system("clear");
 
     //fun
     for(int i = 0; i<=counter; i++){
@@ -73,8 +69,8 @@ int counter = 0;
             std::cout<<"Creating character...\n";
             break;
         }
-        Sleep(400);
-        system("cls");
+        system("sleep 2");
+        system("clear");
         counter++;
     }
 
