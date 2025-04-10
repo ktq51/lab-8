@@ -1,4 +1,4 @@
-#include "Character.h"
+#include "character.h"
 
 void HUD();
 void Combat();
@@ -31,18 +31,18 @@ int main() {
 
 }
 void HUD() { 
-    Sleep(500);
-    system("cls");
-    std::cout<< "Name: "<< character.name <<"       Health: "<< character.totalhealth << "\nRace: " << character.race 
+    system("sleep 2");
+    system("clear");
+    std::cout<< "Name: "<< character.name <<"       Health: "<< character.health << "\nRace: " << character.race 
        <<"\nSex: "<< character.sex<< "\nLevel: "<< character.level <<"\nXP: " <<character.current_xp << "\nXP to next level: "<< character.xp_to_level << std::endl;
     Moving();
 }
 
 void CombatHUD(){
-    Sleep(500);
-    system("cls");
+    system("sleep 2");
+    system("clear");
     std::cout<< "Name: "<<character.name<<"       |       Monater name: "<<
-        currentmonster<<"\nHealth: "<< character.totalhealth<<"       |       Monster health: "<<
+        currentmonster<<"\nHealth: "<< character.health<<"       |       Monster health: "<<
         monsterhp << "\nLevel: "<< character.level<< "        |       Monster Level: "<< monsterlevel<< std::endl;
 }
 
@@ -50,9 +50,9 @@ void Combat(){
     CombatHUD();
     int playerAttack;
     int playerDamage = 8*character.level/2;
-    int monsterAttack = 6* monsterlevel/2;
+    int monsterAttack = 6* monsterlevel/2; 
 
-    if(character.totalhealth>=1 && monsterhp>=1){
+    if(character.health>=0 && monsterhp>=1){
         std::cout<<"\n";
         std::cout<<"1. Attack\n";
         std::cout<<"2. Block\n";
@@ -62,21 +62,20 @@ void Combat(){
 
         if(playerAttack ==1){
             std::cout<<"Attacking... you did "<< playerDamage<<" to the "<< currentmonster<< std::endl;
-            monsterhp = monsterhp-playerDamage;
-            Sleep(1000);
+            monsterhp = (monsterhp-playerDamage<=0)? 0 : monsterhp-playerDamage;
+            system("sleep 2");
             CombatHUD();
             
-            if(monsterhp >= 1){
+            if(monsterhp > 1){
                 std::cout<<"\n";
                 std::cout<<"Monster is attacking..\n";
-                character.totalhealth=character.totalhealth-monsterAttack;
-                std::cout<<"You suffered "<<monsterAttack<< " hp "<< character.totalhealth <<std::endl;
+                character.health = (character.health - monsterAttack <= 0) ? 0 : character.health - monsterAttack;
+                std::cout<<"You suffered "<<monsterAttack<< " hp "<< character.health <<std::endl;
 
-                if(character.totalhealth <= 0){
-                    character.totalhealth = 0;
-                    system("cls");
+                if(character.health <= 0){
+                    system("clear");
                     std::cout<< "You died! \nYou were level: "<<character.level<< " you got killed by: "<<currentmonster<<std::endl;
-                    Sleep(2000);
+                    system("sleep 2");
                     exit(0);
                 }
             }
@@ -84,16 +83,16 @@ void Combat(){
             else if(monsterhp <= 0){
                 monsterhp= 0;
                 std::cout<<"\n";
-                std::cout<< "You defeated "<< currentmonster<<" you are rewarded with "<< monsterhp<< " xp.\nWell done!\n";
+                std::cout<< "You defeated "<< currentmonster<<" you are rewarded with "<< monsterxp << " xp.\nWell done!\n";
                 
                 if(character.level != character.maxlevel){
                     character.current_xp += monsterxp;
                     Level1Up();
                 }
-                Sleep(1000);
+                system("sleep 2");
                   HUD();
             }
-            Sleep(1000);
+            system("sleep 2");
             Combat();
         }
         else if(playerAttack == 2){
@@ -104,15 +103,22 @@ void Combat(){
                 std::cout<< "You blocked the incoming attack\n";
                 character.heal = character.level * 10/2;
                 std::cout<<"You have been healed for "<< character.heal << std::endl;
-                character.totalhealth+=character.heal;
-                Sleep(1000);
+                character.health = (character.health + character.heal > character.totalhealth) ? character.totalhealth : character.health + character.heal;
+                system("sleep 2");
                 Combat();
             }
             else{
-                std::cout<< "You failed to bloack the savage attack\n";
-                character.totalhealth-= monsterAttack;
-                std::cout<<"You were stabbed in the back for "<<monsterAttack<< " current hp "<<character.totalhealth<<std::endl;
-                Sleep(1000);
+                std::cout<< "You failed to block the savage attack\n";
+                character.health-= monsterAttack;
+                character.health = (character.health - monsterAttack <= 0) ? 0 : character.health - monsterAttack;
+                std::cout<<"You were stabbed in the back for "<<monsterAttack<< " current hp "<<character.health<<std::endl;
+                system("sleep 2");
+                if(character.health <= 0){
+                    system("clear");
+                    std::cout<< "You died! \nYou were level: "<<character.level<< " you got killed by: "<<currentmonster<<std::endl;
+                    system("sleep 2");
+                    exit(0);
+                }
                 Combat();
             }
         }
@@ -124,17 +130,23 @@ void Combat(){
                 HUD();
             }
             else{
-                std::cout<<"You fialed to run away\n";
+                std::cout<<"You failed to run away\n";
                 std::cout<< "Monster does a savage attack on you!\n";
-                character.totalhealth -= monsterAttack+10;
-                std:: cout<< "You suffered "<<monsterAttack +10 << "Your current health is "<< character.totalhealth<<std::endl;
-                Sleep(1000);
+                character.health = (character.health - (monsterAttack+10) <= 0) ? 0 : character.health - (monsterAttack+10);
+                std:: cout<< "You suffered "<<monsterAttack +10 << "Your current health is "<< character.health<<std::endl;
+                system("sleep 2");
+                if(character.health <= 0){
+                    system("clear");
+                    std::cout<< "You died! \nYou were level: "<<character.level<< " you got killed by: "<<currentmonster<<std::endl;
+                    system("sleep 2");
+                    exit(0);
+                }
                 Combat();
             }
         }
         else{
             std::cout<< "Invalid number\n";
-            Sleep(500);
+            system("sleep 2");
             Combat();
         }
     }
@@ -161,20 +173,20 @@ void Moving(){
             std:: string tempName = monstername[rand() % currentmonsternames];
             std::cout<<"A "<< tempName << "! prepare to fight!\n";
             currentmonster = tempName;
-            Sleep(1000);
+            system("sleep 2");
             Combat();
         }
         std::cout<<"You find nothing of interest\n";
-        Sleep(1000);
+        system("sleep 2");
         HUD();
     }
     else if(choice == 2){
         std:: cout<< "You want to set up camp for the evening\n";
-        if(character.totalhealth <= 99){
-            character.totalhealth += 10* character.level;
+        if(character.health <= character.totalhealth){
+            character.health = (character.health + 10*character.level>character.totalhealth)?character.totalhealth:character.health+10*character.level;
         }
-        std:: cout<< "You healed by resting, Health is now "<< character.totalhealth << std::endl;
-        Sleep(1000);
+        std:: cout<< "You healed by resting, Health is now "<< character.health << std::endl;
+        system("sleep 2");
         HUD();
     }
     else if(choice == 3){
@@ -186,16 +198,16 @@ void Moving(){
             std:: string tempName = monstername[rand() % currentmonsternames];
             std::cout<<"A "<< tempName << "! prepare to fight!\n";
             currentmonster = tempName;
-            Sleep(1000);
+            system("sleep 2");
             Combat();
         }
         std::cout<<"You find nothing of interest\n";
-        Sleep(1000);
+        system("sleep 2");
         HUD();
     }
     else{
         std::cout<<"Invalid number\n";
-        Sleep(500);
+        system("sleep 2");
         Moving();
     }
 }
@@ -213,20 +225,19 @@ void Level1Up(){
             character.level = 60;
         }
 
-        character.maxhealth = character.totalhealth;
+        character.health = character.totalhealth;
         std:: cout<< "Wait what's this? A level up? You are now level "<< character.level<< std::endl;
         std:: cout<< " Your total health increasded. Now your health is "<< character.totalhealth<< std::endl;
         std::cout<<"\n";
-        Sleep(1000);
+        system("sleep 2");
         Level1Up();
     }
-    Sleep(2000);
+    system("sleep 2");
     HUD();
 }
 
 
 void CreateMonster(){
-    monsterhp = 30;
     monsterlevel = (rand() % 3)+ character.level;
 
     monsterhp = (rand() % 30)+ monsterlevel;
